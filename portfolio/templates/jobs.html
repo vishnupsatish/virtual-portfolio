@@ -1,0 +1,134 @@
+{% extends "navbar.html" %}
+{% block content %}
+
+<button onclick="show('job-form')" style="margin-top: 10px; margin-bottom: 10px;" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></button>
+
+
+<form id="job-form" style="display: none;"  method="POST" action="">
+    {{ form.hidden_tag() }}
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">assignment_ind</i>
+                            {{ form.name.label(class="form-control-label") }}
+                            {% if form.name.errors %}
+                            {{ form.name(class="validate invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                <span class="error-feedback">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.name(class="validate") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">business_center</i>
+                            {{ form.role.label(class="form-control-label") }}
+                            {% if form.role.errors %}
+                            {{ form.role(class="validate invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.role.errors %}
+                                <span class="error-feedback">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.role(class="validate") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">description</i>
+                            {{ form.description.label(class="form-control-label") }}
+                            {% if form.description.errors %}
+                            {{ form.description(class="validate invalid materialize-textarea") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}
+                                <span class="error-feedback">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.description(class="validate materialize-textarea") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">date_range</i>
+                            {{ form.start_date.label(class="form-control-label") }}
+                            {% if form.start_date.errors %}
+                            {{ form.start_date(class="validate invalid datepicker") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.start_date.errors %}
+                                <span class="error-feedback">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.start_date(class="validate datepicker") }}
+                            {% endif %}
+                        </div>
+                        <div class="input-field col s6">
+                            {{ form.end_date.label(class="form-control-label") }}
+                            {% if form.end_date.errors %}
+                            {{ form.end_date(class="validate invalid datepicker") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.end_date.errors %}
+                                <span class="error-feedback">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.end_date(class="validate datepicker") }}
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="switch">
+                        <label>
+                            Paid
+                            {{ form.volunteer(class="validate invalid") }}
+                            <span class="lever"></span>
+                            Non-paid
+                        </label>
+                    </div>
+
+
+                </div>
+
+                <div class="card-action">
+                    <button type="submit" class="btn-floating btn-large waves-effect waves-light red"><i
+                            class="material-icons">add</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="row">
+    <div class="col s12 m4">
+        <div class="card white">
+            <div class="card-content black-text">
+                <span class="card-title">((Job Name))</span>
+                <p>Role: ((date thing))</p>
+                <p>Start Date: ((date thing))</p>
+                <p>End Date: ((date thing))</p>
+                <p>Description: ((date thing))</p>
+            </div>
+            <div class="card-action">
+                <a href="#">Edit Info</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

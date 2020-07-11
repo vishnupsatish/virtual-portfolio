@@ -1,0 +1,231 @@
+{% extends "navbar.html" %}
+{% block content %}
+
+<h1>Welcome, {{ current_user.name }}</h1>
+
+<form action="" method="POST" enctype="multipart/form-data" id="updateForm">{{ form.hidden_tag() }}</form>
+<form action="/delete_resume" method="POST" id="deleteResumeForm"></form>
+
+<div class="row">
+  <div class="col s12">
+    <div class="card white">
+      <div class="card-content black-text">
+        <span class="card-title">About You</span>
+        <div class="input-field m12 s12">
+          <i class="material-icons prefix">description</i>
+          {{ form.bio.label(class="form-control-label") }}
+          {% if form.bio.errors %}
+          {{ form.bio(class="validate invalid materialize-textarea", form="updateForm") }}
+          <div class="invalid-feedback">
+            {% for error in form.bio.errors %}
+            <span class="error-feedback">{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %}
+          {{ form.bio(class="validate materialize-textarea", form="updateForm") }}
+          {% endif %}
+        </div>
+        <div class="input-field m12 s12">
+          <i class="material-icons prefix">assignment_ind</i>
+
+
+          {{ form.skills.label(class="form-control-label") }}
+          {% if form.skills.errors %}
+          {{ form.skills(class="validate invalid", form="updateForm") }}
+          <div class="invalid-feedback">
+            {% for error in form.skills.errors %}
+            <span class="error-feedback">{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %}
+          {{ form.skills(class="validate", form="updateForm") }}
+          {% endif %}
+        </div>
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>Upload your resume</span>
+            {{ form.resume(class="validate", form="updateForm") }}
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+        </div>
+        {% if current_user.resume %}
+        <div style="display: flex;">
+        <button type="submit" form="deleteResumeForm" class="btn red white-text">Delete Resume</button>
+        <p style="margin-left: 20px;"><a target="_blank" rel="noopener noreferrer" href="https://res.cloudinary.com/{{ cloud_name }}/image/upload/{{ current_user.resume }}.pdf">{{ current_user.resume }}.pdf</a></p>
+      </div>
+        {% endif %}
+      </div>
+
+        <div class="card-action">
+          {{ form.submit(class="btn waves-effect blue", form="updateForm") }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <h1>Your Most Recent Jobs</h1>
+
+  <div class="carousel">
+    <a class="carousel-item" href="#one!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Job))</span>
+              <p>Role: ((date thing))</p>
+              <p>Start Date: ((date thing))</p>
+              <p>End Date: ((date thing))</p>
+              <p>Description: ((date thing))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a class="carousel-item" href="#two!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Job))</span>
+              <p>Role: ((date thing))</p>
+              <p>Start Date: ((date thing))</p>
+              <p>End Date: ((date thing))</p>
+              <p>Description: ((date thing))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a class="carousel-item" href="#three!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Job))</span>
+              <p>Role: ((date thing))</p>
+              <p>Start Date: ((date thing))</p>
+              <p>End Date: ((date thing))</p>
+              <p>Description: ((date thing))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="center-align">
+    <a class="waves-effect waves-light red btn-large" href="{{ url_for('jobs') }}"><i
+        class="material-icons left">business</i>Manage Jobs</a>
+  </div>
+
+
+  <!--Achievements-->
+
+  <h1>Your Achievements</h1>
+
+  <div class="carousel">
+    <a class="carousel-item" href="#one!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Acheivement Name))</span>
+              <p>Year: ((date thing))</p>
+              <p>Description: ((description))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a class="carousel-item" href="#two!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Acheivement Name))</span>
+              <p>Year: ((date thing))</p>
+              <p>Description: ((description))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a class="carousel-item" href="#three!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Acheivement Name))</span>
+              <p>Year: ((date thing))</p>
+              <p>Description: ((description))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="center-align">
+    <a class="waves-effect waves-light red btn-large" href="{{ url_for('achievements') }}"><i
+        class="material-icons left">assistant_photo</i>Manage Achievements</a>
+  </div>
+
+
+  <!--Projects-->
+
+
+  <h1>Your Projects</h1>
+
+  <div class="carousel">
+    <a class="carousel-item" href="#one!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Project Name))</span>
+              <p>Description: ((description))</p>
+              <p>Year: ((date thing))</p>
+              <p>Url: ((url thing))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a class="carousel-item" href="#two!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Project Name))</span>
+              <p>Description: ((description))</p>
+              <p>Year: ((date thing))</p>
+              <p>Url: ((url thing))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a class="carousel-item" href="#three!">
+      <div class="row">
+        <div class="col s12">
+          <div class="card white">
+            <div class="card-content black-text">
+              <span class="card-title">((Project Name))</span>
+              <p>Description: ((description))</p>
+              <p>Year: ((date thing))</p>
+              <p>Url: ((url thing))</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="center-align">
+    <a class="waves-effect waves-light red btn-large" href="{{ url_for('projects') }}"><i
+        class="material-icons left">assignment_turned_in</i>Manage Projects</a>
+  </div>
+
+
+  {% endblock content %}
