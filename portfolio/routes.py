@@ -31,8 +31,6 @@ def home():
     if request.method == "GET":
         form.bio.data = current_user.bio
         form.skills.data = current_user.skills
-
-
     if form.validate_on_submit():
         current_user.bio = form.bio.data
         current_user.skills = form.skills.data
@@ -69,6 +67,8 @@ def jobs():
         db.session.add(job)
         db.session.commit()
         return redirect(url_for('jobs'))
+    elif (not form.validate_on_submit()) and request.method == "POST":
+        flash('There has been an error. Click on the + button to see the error.', 'error')
     return render_template('jobs.html', form=form)
 
 @app.route('/achievements', methods=['GET', 'POST'])
@@ -79,6 +79,8 @@ def achievements():
         db.session.add(achievement)
         db.session.commit()
         return redirect(url_for('achievements'))
+    elif (not form.validate_on_submit()) and request.method == "POST":
+        flash('There has been an error. Click on the + button to see the error.', 'error')
     return render_template('achievements.html', page_title='Achievements', form=form)
 
 @app.route('/projects', methods=['GET', 'POST'])
@@ -89,6 +91,8 @@ def projects():
         db.session.add(project)
         db.session.commit()
         return redirect(url_for('projects'))
+    elif (not form.validate_on_submit()) and request.method == "POST":
+        flash('There has been an error. Click on the + button to see the error.', 'error')
     return render_template('projects.html', page_title='Projects', form=form)
 
 

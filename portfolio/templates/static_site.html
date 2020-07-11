@@ -10,9 +10,9 @@
 
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="{{ url_for('staticjobs') }}">Jobs</a></li>
-                <li><a href="{{ url_for('staticachievements') }}">Achievements</a></li>
-                <li><a href="{{ url_for('staticprojects') }}">Projects</a></li>
+                <li><a href="#jobs">Jobs</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#projects">Projects</a></li>
             </ul>
         </div>
     </nav>
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="section grey lighten-2">
+<div id="jobs" class="section grey lighten-2">
     <div class="row container">
         <h1>Recent Jobs</h1>
         <div class="carousel">
@@ -120,7 +120,7 @@
     </div>
 </div>
 
-<div class="section grey lighten-2">
+<div id="achievements" class="section grey lighten-2">
     <div class="row container">
 
         <h1>Recent Achievements</h1>
@@ -180,7 +180,7 @@
     </div>
 </div>
 
-<div class="section grey lighten-2">
+<div id="projects" class="section grey lighten-2">
     <div class="row container">
         <h1> Recent Projects</h1>
         <div class="carousel">

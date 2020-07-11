@@ -62,9 +62,9 @@ class LoginForm(FlaskForm):
 
 
 class AddJobForm(FlaskForm):
-    name = StringField('Name of Company', validators=[DataRequired(), Length(min=2, max=20)])
-    role = StringField('Your role (ex: Software Developer)', validators=[DataRequired(), Length(min=2, max=20)])
-    description = TextAreaField('What you did, skills you acquired and anything else you want your future employers to see.', validators=[DataRequired(), Length(min=10, max=100)])
+    name = StringField('Name of Company', validators=[DataRequired(), Length(min=2, max=40)])
+    role = StringField('Your role (ex: Software Developer)', validators=[DataRequired(), Length(min=2, max=40)])
+    description = TextAreaField('What you did, skills you acquired and anything else you want your future employers to see.', validators=[DataRequired(), Length(min=10, max=200)])
     start_date = StringField('Start Date', validators=[DataRequired()])
     end_date = StringField('End Date (Optional)')
     volunteer = BooleanField('Volunteer? (No pay)')
@@ -72,14 +72,14 @@ class AddJobForm(FlaskForm):
 
 
 class AddAchievementForm(FlaskForm):
-    name = StringField('What was your achievement?', validators=[DataRequired(), Length(min=2, max=20)])
-    description = TextAreaField('Give a short description about the achievement and how you earned it.', validators=[DataRequired(), Length(min=10, max=100)])
+    name = StringField('What was your achievement?', validators=[DataRequired(), Length(min=2, max=40)])
+    description = TextAreaField('Give a short description about the achievement and how you earned it.', validators=[DataRequired(), Length(min=10, max=200)])
     year = IntegerField('Year', validators=[DataRequired(), NumberRange(1900,datetime.datetime.now().year)])
 
 
 class AddProjectForm(FlaskForm):
-    name = StringField('What is the name of the project?', validators=[DataRequired(), Length(min=2, max=20)])
-    description = TextAreaField('Give a short description about the project.', validators=[DataRequired(), Length(min=10, max=100)])
+    name = StringField('What is the name of the project?', validators=[DataRequired(), Length(min=2, max=40)])
+    description = TextAreaField('Give a short description about the project.', validators=[DataRequired(), Length(min=10, max=200)])
     year = IntegerField('Year', validators=[DataRequired(), NumberRange(1900,datetime.datetime.now().year)])
     url = URLField('URL of Project')
 
