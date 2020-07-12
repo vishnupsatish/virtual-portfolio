@@ -5,7 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import json
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, url_for, flash, redirect, request, abort, Response
 from portfolio import app, db, bcrypt
 from portfolio.forms import (RegistrationForm, LoginForm, AddJobForm, AddAchievementForm, AddProjectForm, UpdateProfileForm, ColorForm)
 from portfolio.models import User, Job, Achievement, Project
@@ -316,6 +316,12 @@ def how_it_works():
     return render_template('how_it_works.html')
 
 # API starts below
+
+
+@app.route('/api/reference')
+def api_docs():
+    return render_template('api_docs.html')
+
 
 @app.route('/api/get_all_info/<string:token>')
 def get_all_info(token):
