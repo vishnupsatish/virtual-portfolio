@@ -5,11 +5,12 @@
 <div class="navbar-fixed">
     <nav class="red">
         <div class="nav-wrapper">
-            <a style="margin-left: 20px;" class="brand-logo" href="{{ url_for('home') }}"><img class="image-logo"
+            <a class="brand-logo ml-20" href="{{ url_for('home') }}"><img class="image-logo"
                     src="{{ url_for('static', filename='images/logo_name.png') }}"></a>
 
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
+                <li><a href="{{ url_for('static_site') }}">Home</a></li>
                 <li><a href="{{ url_for('staticjobs') }}">Jobs</a></li>
                 <li><a href="{{ url_for('staticachievements') }}">Achievements</a></li>
                 <li><a href="{{ url_for('staticprojects') }}">Projects</a></li>
@@ -17,53 +18,28 @@
         </div>
     </nav>
 </div>
+<div class="container">
 
-<div class="row">
-    <div class="col s12">
-        <div class="card red lighten-1">
-            <div class="card-content white-text">
-                <span class="card-title">((Acheivement Name))</span>
-                <p>Year: ((date thing))</p>
-                <p>Description: ((description))</p>
+
+<h1>Achievements</h1>
+
+{% for achievement in achievements %}
+
+    <div class="row">
+        <div class="col s12">
+            <div class="card red lighten-1">
+                <div class="card-content white-text">
+                    <span class="card-title">{{ achievement.name }}</span>
+                    <p>Year: {{ achievement.year }}</p>
+                    <p>Description: {{ achievement.description }}</p>
+                </div>
             </div>
         </div>
     </div>
+
+{% endfor %}
+
 </div>
 
-<div class="row">
-    <div class="col s12">
-        <div class="card red lighten-1">
-            <div class="card-content white-text">
-                <span class="card-title">((Acheivement Name))</span>
-                <p>Year: ((date thing))</p>
-                <p>Description: ((description))</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col s12">
-        <div class="card red lighten-1">
-            <div class="card-content white-text">
-                <span class="card-title">((Acheivement Name))</span>
-                <p>Year: ((date thing))</p>
-                <p>Description: ((description))</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col s12">
-        <div class="card red lighten-1">
-            <div class="card-content white-text">
-                <span class="card-title">((Acheivement Name))</span>
-                <p>Year: ((date thing))</p>
-                <p>Description: ((description))</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 {% endblock %}

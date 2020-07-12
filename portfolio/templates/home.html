@@ -47,185 +47,139 @@
             {{ form.resume(class="validate", form="updateForm") }}
           </div>
           <div class="file-path-wrapper">
+            <!-- THIS JUST MAKES ANOTHER FIELD?? BUTTON DOESN'T WORK-->
             <input class="file-path validate" type="text">
           </div>
         </div>
         {% if current_user.resume %}
-        <div style="display: flex;">
-        <button type="submit" form="deleteResumeForm" class="btn red white-text">Delete Resume</button>
-        <p style="margin-left: 20px;"><a target="_blank" rel="noopener noreferrer" href="https://res.cloudinary.com/{{ cloud_name }}/image/upload/{{ current_user.resume }}.pdf">{{ current_user.resume }}.pdf</a></p>
-      </div>
+        <div class="dispf">
+          <button type="submit" form="deleteResumeForm" class="btn red white-text">Delete Resume</button>
+          <p class="ml-20"><a target="_blank" rel="noopener noreferrer"
+              href="https://res.cloudinary.com/{{ cloud_name }}/image/upload/{{ current_user.resume }}.pdf">{{ current_user.resume }}.pdf</a>
+          </p>
+        </div>
         {% endif %}
       </div>
 
-        <div class="card-action">
-          {{ form.submit(class="btn waves-effect blue", form="updateForm") }}
-        </div>
+      <div class="card-action">
+        {{ form.submit(class="btn waves-effect blue", form="updateForm") }}
       </div>
     </div>
   </div>
+</div>
 
 
 
-  <h1>Your Recent Jobs</h1>
+<h1>Your Recent Jobs</h1>
 
-  <div class="carousel">
-    <a class="carousel-item" href="#one!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Job))</span>
-              <p>Role: ((date thing))</p>
-              <p>Start Date: ((date thing))</p>
-              <p>End Date: ((date thing))</p>
-              <p>Description: ((date thing))</p>
-            </div>
+{% if current_user.jobs|length == 0 %}
+<p>Hmm, there doesn't seem to be any jobs. <a href="{{ url_for('jobs') }}">Do you want to create one?</a></p>
+
+{% else %}
+
+<div class="carousel">
+  {% for job in current_user.jobs %}
+  <a class="carousel-item" href="#one!">
+    <div class="row">
+      <div class="col s12">
+        <div class="card white">
+          <div class="card-content black-text">
+            <span class="card-title">{{ job.company_name }}</span>
+            <p>Role: {{ job.role }}</p>
+            <p>Start Date: {{ job.start_date.strftime('%d %b, %Y') }}</p>
+            {% if job.end_date != None %}
+            <p>End Date: {{ job.end_date.strftime('%d %b, %Y') }}</p>
+            {% else %}
+            <p>End Date: Present</p>
+            {% endif %}
+            <p>Description: {{ job.description }}</p>
           </div>
         </div>
       </div>
-    </a>
-    <a class="carousel-item" href="#two!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Job))</span>
-              <p>Role: ((date thing))</p>
-              <p>Start Date: ((date thing))</p>
-              <p>End Date: ((date thing))</p>
-              <p>Description: ((date thing))</p>
-            </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% endif %}
+<div class="center-align">
+  <a class="waves-effect waves-light red btn-large" href="{{ url_for('jobs') }}"><i
+      class="material-icons left">business</i>Manage Jobs</a>
+</div>
+
+
+<!--Achievements-->
+
+<h1>Your Recents Achievements</h1>
+
+{% if current_user.achievements|length == 0 %}
+<p>Hmm, there doesn't seem to be any achievements. <a href="{{ url_for('achievements') }}">Do you want to create
+    one?</a></p>
+
+
+{% else %}
+
+<div class="carousel">
+  {% for achievement in current_user.achievements %}
+  <a class="carousel-item" href="#one!">
+    <div class="row">
+      <div class="col s12">
+        <div class="card white">
+          <div class="card-content black-text">
+            <span class="card-title">{{ achievement.name }}</span>
+            <p>Year: {{ achievement.year }}</p>
+            <p>{{ achievement.description }}</p>
           </div>
         </div>
       </div>
-    </a>
-    <a class="carousel-item" href="#three!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Job))</span>
-              <p>Role: ((date thing))</p>
-              <p>Start Date: ((date thing))</p>
-              <p>End Date: ((date thing))</p>
-              <p>Description: ((date thing))</p>
-            </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% endif %}
+<div class="center-align">
+  <a class="waves-effect waves-light red btn-large" href="{{ url_for('achievements') }}"><i
+      class="material-icons left">assistant_photo</i>Manage Achievements</a>
+</div>
+
+
+<!--Projects-->
+
+
+<h1>Your Recent Projects</h1>
+
+{% if current_user.projects|length == 0 %}
+<p>Hmm, there doesn't seem to be any projects. <a href="{{ url_for('projects') }}">Do you want to create one?</a></p>
+{% else %}
+
+<div class="carousel">
+  {% for project in current_user.projects %}
+  <a class="carousel-item" href="#one!">
+    <div class="row">
+      <div class="col s12">
+        <div class="card white">
+          <div class="card-content black-text">
+            <span class="card-title">{{ project.name }}</span>
+            <p>Year: {{ project.year }}</p>
+            <p>{{ project.description }}</p>
+
+          </div>
+          <div class="card-action">
+            <button onclick="window.open('{{ project.url }}')" class="btn waves-effect red">View Project</button>
           </div>
         </div>
       </div>
-    </a>
-  </div>
-  <div class="center-align">
-    <a class="waves-effect waves-light red btn-large" href="{{ url_for('jobs') }}"><i
-        class="material-icons left">business</i>Manage Jobs</a>
-  </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% endif %}
+<div class="center-align">
+  <a class="waves-effect waves-light red btn-large" href="{{ url_for('projects') }}"><i
+      class="material-icons left">assignment_turned_in</i>Manage Projects</a>
+</div>
 
 
-  <!--Achievements-->
-
-  <h1>Your Recents Achievements</h1>
-
-  <div class="carousel">
-    <a class="carousel-item" href="#one!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Acheivement Name))</span>
-              <p>Year: ((date thing))</p>
-              <p>Description: ((description))</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-    <a class="carousel-item" href="#two!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Acheivement Name))</span>
-              <p>Year: ((date thing))</p>
-              <p>Description: ((description))</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-    <a class="carousel-item" href="#three!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Acheivement Name))</span>
-              <p>Year: ((date thing))</p>
-              <p>Description: ((description))</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  </div>
-  <div class="center-align">
-    <a class="waves-effect waves-light red btn-large" href="{{ url_for('achievements') }}"><i
-        class="material-icons left">assistant_photo</i>Manage Achievements</a>
-  </div>
-
-
-  <!--Projects-->
-
-
-  <h1>Your Recent Projects</h1>
-
-  <div class="carousel">
-    <a class="carousel-item" href="#one!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Project Name))</span>
-              <p>Description: ((description))</p>
-              <p>Year: ((date thing))</p>
-              <p>Url: ((url thing))</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-    <a class="carousel-item" href="#two!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Project Name))</span>
-              <p>Description: ((description))</p>
-              <p>Year: ((date thing))</p>
-              <p>Url: ((url thing))</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-    <a class="carousel-item" href="#three!">
-      <div class="row">
-        <div class="col s12">
-          <div class="card white">
-            <div class="card-content black-text">
-              <span class="card-title">((Project Name))</span>
-              <p>Description: ((description))</p>
-              <p>Year: ((date thing))</p>
-              <p>Url: ((url thing))</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  </div>
-  <div class="center-align">
-    <a class="waves-effect waves-light red btn-large" href="{{ url_for('projects') }}"><i
-        class="material-icons left">assignment_turned_in</i>Manage Projects</a>
-  </div>
-
-
-  {% endblock content %}
+{% endblock content %}

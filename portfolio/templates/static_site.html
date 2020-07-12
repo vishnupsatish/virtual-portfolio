@@ -5,11 +5,12 @@
 <div class="navbar-fixed">
     <nav class="red">
         <div class="nav-wrapper">
-            <a style="margin-left: 20px;" class="brand-logo" href="{{ url_for('home') }}"><img class="image-logo"
+            <a class="brand-logo ml-20" href="{{ url_for('home') }}"><img class="image-logo"
                     src="{{ url_for('static', filename='images/logo_name.png') }}"></a>
 
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
+                <li><a href="#">Home</a></li>
                 <li><a href="#jobs">Jobs</a></li>
                 <li><a href="#achievements">Achievements</a></li>
                 <li><a href="#projects">Projects</a></li>
@@ -20,33 +21,35 @@
 
 
 
-<div class="section grey lighten-2">
+<div class="section grey lighten-2" id="biography">
     <div class="row container">
-        <h1>Pranav Rao</h1>
-        <h5>Professional Greatness</h5>
-
+        <h1>{{ current_user.name }}</h1>
         <div class="row">
             <div class="col s12">
-                <div class="card-panel red lighten-1" style="padding-top: 2px;">
-                    <h3 class="white-text">Biography</h3>
-                    <span class="white-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem
-                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer
-                        took
-                        a
-                        galley of type and scrambled it to make a type specimen book. It has survived not only five
-                        centuries,
-                        but also the leap into electronic typesetting, remaining essentially unchanged. It was
-                        popularised
-                        in
-                        the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently
-                        with
-                        desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span>
+                <div class="card-panel red lighten-1 pt-2">
+                    <h3 class="white-text">Profile</h3>
+                    <div class="mb-20">
+                    {% if current_user.skills %}
+                    <h5 class="white-text">Skills</h5>
+                    {% for skill in current_user.skills.split(',') %}
+                    <div class="chip"> {{ skill }} </div> <!--Pranav put the magic here -->
+                    {% endfor %}
+                    {% endif %}
+                    </div>
+                    <h5 class="white-text">Biography</h5>
+                    {% if current_user.bio %}
+                    <span class="white-text mt-20">{{ current_user.bio }}</span>
+                    {% else %}
+                    <span class="white-text mt-20">This user has not added a bio yet.</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+{% if current_user.jobs %}
 
 <div class="parallax-container">
     <div class="parallax">
@@ -59,51 +62,27 @@
     <div class="row container">
         <h1>Recent Jobs</h1>
         <div class="carousel">
-            <a class="carousel-item" href="#one!">
+            {% for job in current_user.jobs[:3] %}
+            <a class="carousel-item">
                 <div class="row">
                     <div class="col s12">
                         <div class="card red lighten-1">
                             <div class="card-content white-text">
-                                <span class="card-title">((Job))</span>
-                                <p>Role: ((date thing))</p>
-                                <p>Start Date: ((date thing))</p>
-                                <p>End Date: ((date thing))</p>
-                                <p>Description: ((date thing))</p>
+                                <span class="card-title">{{ job.company_name }}</span>
+                                <p>Role: {{ job.role }}</p>
+                                <p>Start Date: {{ job.start_date.strftime('%d %b, %Y') }}</p>
+                                {% if job.end_date != "" %}
+                                <p>End Date: {{ job.end_date.strftime('%d %b, %Y') }}</p>
+                                {% else %}
+                                <p>End Date: {{ job.end_date }}</p>
+                                {% endif %}
+                                <p>Description: {{ job.description }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </a>
-            <a class="carousel-item" href="#two!">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
-                                <span class="card-title">((Job))</span>
-                                <p>Role: ((date thing))</p>
-                                <p>Start Date: ((date thing))</p>
-                                <p>End Date: ((date thing))</p>
-                                <p>Description: ((date thing))</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a class="carousel-item" href="#three!">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
-                                <span class="card-title">((Job))</span>
-                                <p>Role: ((date thing))</p>
-                                <p>Start Date: ((date thing))</p>
-                                <p>End Date: ((date thing))</p>
-                                <p>Description: ((date thing))</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            {% endfor %}
         </div>
         <div class="center-align">
             <a class="waves-effect waves-light red btn-large" href="{{ url_for('staticjobs') }}"><i
@@ -113,6 +92,9 @@
 </div>
 </div>
 </div>
+{% endif %}
+
+{% if current_user.achievements %}
 
 <div class="parallax-container">
     <div class="parallax"><img
@@ -120,118 +102,76 @@
     </div>
 </div>
 
+
 <div id="achievements" class="section grey lighten-2">
     <div class="row container">
 
         <h1>Recent Achievements</h1>
         <div class="carousel">
-            <a class="carousel-item" href="#one!">
+            {% for achievement in current_user.achievements[0:3]%}
+            <a class="carousel-item">
                 <div class="row">
                     <div class="col s12">
                         <div class="card red lighten-1">
                             <div class="card-content white-text">
-                                <span class="card-title">((Acheivement Name))</span>
-                                <p>Year: ((date thing))</p>
-                                <p>Description: ((description))</p>
+                                <span class="card-title">{{ achievement.name }}</span>
+                                <p>Year: {{ achievement.year }}</p>
+                                <p>Description: {{ achievement.description }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </a>
-            <a class="carousel-item" href="#two!">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
-                                <span class="card-title">((Acheivement Name))</span>
-                                <p>Year: ((date thing))</p>
-                                <p>Description: ((description))</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a class="carousel-item" href="#three!">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
-                                <span class="card-title">((Acheivement Name))</span>
-                                <p>Year: ((date thing))</p>
-                                <p>Description: ((description))</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            {% endfor %}
         </div>
         <div class="center-align">
-            <a class="waves-effect waves-light red btn-large" href="{{ url_for('achievements') }}"><i
+            <a class="waves-effect waves-light red btn-large" href="{{ url_for('staticachievements') }}"><i
                     class="material-icons left">assistant_photo</i>View all Achievements</a>
         </div>
-        
     </div>
 </div>
-</div>
+
+{% endif %}
+
+{% if current_user.projects %}
 
 <div class="parallax-container">
     <div class="parallax"><img
-            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80">
+            src="https://images.unsplash.com/photo-1519834785169-98be25ec3f84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80">
     </div>
 </div>
 
+
 <div id="projects" class="section grey lighten-2">
     <div class="row container">
-        <h1> Recent Projects</h1>
+        <h1>Recent Projects</h1>
         <div class="carousel">
-            <a class="carousel-item" href="#one!">
+            {% for project in current_user.projects[0:3]%}
+            <a class="carousel-item">
                 <div class="row">
                     <div class="col s12">
                         <div class="card red lighten-1">
                             <div class="card-content white-text">
-                                <span class="card-title">((Project Name))</span>
-                                <p>Description: ((description))</p>
-                                <p>Year: ((date thing))</p>
-                                <p>Url: ((url thing))</p>
+                                <span class="card-title">{{ project.name }}</span>
+                                <p>Year: {{ project.year }}</p>
+                                <p>{{ project.description }}</p>
                             </div>
+                            <div class="card-action">
+                                <button onclick="window.open('{{ project.url }}')" class="btn waves-effect red">View Project</button>
+                              </div>
                         </div>
                     </div>
                 </div>
             </a>
-            <a class="carousel-item" href="#two!">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
-                                <span class="card-title">((Project Name))</span>
-                                <p>Description: ((description))</p>
-                                <p>Year: ((date thing))</p>
-                                <p>Url: ((url thing))</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a class="carousel-item" href="#three!">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
-                                <span class="card-title">((Project Name))</span>
-                                <p>Description: ((description))</p>
-                                <p>Year: ((date thing))</p>
-                                <p>Url: ((url thing))</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            {% endfor %}
         </div>
         <div class="center-align">
-            <a class="waves-effect waves-light red btn-large" href="{{ url_for('projects') }}"><i
-                    class="material-icons left">assignment_turned_in</i>View All Projects</a>
+            <a class="waves-effect waves-light red btn-large" href="{{ url_for('staticprojects') }}"><i
+                    class="material-icons left">assistant_photo</i>View all Projects</a>
         </div>
     </div>
 </div>
-</div>
+
+{% endif %}
+
 {% endblock %}

@@ -26,6 +26,7 @@ cloudinary.config(
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
+@login_required
 def home():
     form = UpdateProfileForm()
     if request.method == "GET":
@@ -69,7 +70,7 @@ def jobs():
         return redirect(url_for('jobs'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
-    return render_template('jobs.html', form=form)
+    return render_template('jobs.html', form=form, jobs=current_user.jobs)
 
 @app.route('/achievements', methods=['GET', 'POST'])
 def achievements():
@@ -81,7 +82,7 @@ def achievements():
         return redirect(url_for('achievements'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
-    return render_template('achievements.html', page_title='Achievements', form=form)
+    return render_template('achievements.html', page_title='Achievements', form=form, achievements=current_user.achievements)
 
 @app.route('/projects', methods=['GET', 'POST'])
 def projects():
@@ -93,7 +94,7 @@ def projects():
         return redirect(url_for('projects'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
-    return render_template('projects.html', page_title='Projects', form=form)
+    return render_template('projects.html', page_title='Projects', form=form, projects=current_user.projects)
 
 
 @app.route("/about")
@@ -108,7 +109,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password, name=form.name.data, token=secrets.token_hex(16))
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, name=form.name.data, token=secrets.token_hex(16), bio=form.bio.data)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -134,19 +135,83 @@ def login():
 
 @app.route('/static_site')
 def static_site():
-    return render_template('static_site.html', page_title=current_user.name)
+    return render_template('static_site.html', page_title=current_user.name, current_user=current_user)
 
 @app.route('/static_site/jobs')
 def staticjobs():
-    return render_template('staticjobs.html', page_title=current_user.name)
+    return render_template('staticjobs.html', page_title=current_user.name, jobs=current_user.jobs)
 
 @app.route('/static_site/achievements')
 def staticachievements():
-    return render_template('staticachievements.html', page_title=current_user.name)
+    return render_template('staticachievements.html', page_title=current_user.name, achievements=current_user.achievements)
 
 @app.route('/static_site/projects')
 def staticprojects():
-    return render_template('staticprojects.html', page_title=current_user.name)
+    return render_template('staticprojects.html', page_title=current_user.name, projects=current_user.projects)
+
+@app.route('/edit/project/<int:id>', methods=["GET", 'POST'])
+def edit_projects(id):
+    project = Project.query.filter_by(id=id).first_or_404()
+    if project.creator != current_user:
+        abort(403)
+    form = AddProjectForm()
+    if form.validate_on_submit():
+        project.name = form.name.data
+        project.description = form.description.data
+        project.year = form.year.data
+        project.url = form.url.data
+        db.session.commit()
+        flash('Your changes have been made.', 'success')
+        return redirect(url_for('home'))
+    form.name.data = project.name
+    form.description.data = project.description
+    form.year.data = project.year
+    form.url.data = project.url
+    return render_template('edit_projects.html', form=form)
+    
+@app.route('/edit/job/<int:id>', methods=["GET", 'POST'])
+def edit_jobs(id):
+    job = Job.query.filter_by(id=id).first_or_404()
+    if job.employee != current_user:
+        abort(403)
+    form = AddJobForm()
+    if form.validate_on_submit():
+        job.company_name = form.name.data
+        job.role = form.role.data
+        job.description = form.description.data
+        job.start_date = datetime.datetime.strptime(form.start_date.data, "%b %d, %Y")
+        if form.end_date.data != "":
+            job.end_date = datetime.datetime.strptime(form.end_date.data, "%b %d, %Y")
+        job.volunteer = form.volunteer.data
+        db.session.commit()
+        flash('Your changes have been made.', 'success')
+        return redirect(url_for('home'))
+    form.name.data = job.company_name
+    form.role.data = job.role
+    form.description.data = job.description
+    form.start_date.data = job.start_date.strftime("%b %d, %Y")
+    form.end_date.data = job.end_date.strftime("%b %d, %Y") if job.end_date != None else ""
+    form.volunteer.data = job.volunteer
+    return render_template("edit_jobs.html", form=form)
+
+@app.route('/edit/achievement/<int:id>', methods=["GET", 'POST'])
+def edit_achievements(id):
+    achievement = Achievement.query.filter_by(id=id).first_or_404()
+    if achievement.winner != current_user:
+        abort(403)
+    form = AddAchievementForm()
+    if form.validate_on_submit():
+        achievement.name = form.name.data
+        achievement.description = form.description.data
+        achievement.year = form.year.data
+        db.session.commit()
+        flash('Your changes have been made.', 'success')
+        return redirect(url_for('home'))
+    form.name.data = achievement.name
+    form.description.data = achievement.description
+    form.year.data = achievement.year
+    return render_template('edit_achievements.html', form=form)
+
 
 @app.route('/test')
 def test():
@@ -155,5 +220,5 @@ def test():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 

@@ -90,3 +90,47 @@ textarea {
 img {
   opacity: 1.0 !important;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+#button1 {
+  margin-top: 10px; 
+  margin-bottom: 10px;
+}
+
+#achievement-form {
+  display: none;
+}
+
+.ml-20{
+  margin-left: 20px;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.mt-20{
+  margin-top: 20px;
+}
+.mb-20{
+  margin-bottom: 20px;
+}
+
+.mb-50{
+  margin-bottom: 50px;
+}
+
+.dispf{
+  display: flex;
+}
+.dispn{
+  display: none;
+}
+.dispb{
+  display:block;
+}
+
+.pt-2{
+  padding-top: 2px;
+}

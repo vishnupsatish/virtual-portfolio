@@ -6,15 +6,18 @@ $(document).ready(function () {
     $('.datepicker').datepicker();
     $('.chips').chips();
     $('.parallax').parallax();
+    $("#job-form").css('display', "none");
+    $("#achievement-form").css('display', "none");
+    $("#project-form").css('display', "none");
 });
 
 function show(id) {
     elem = document.getElementById(id)
-    console.log(elem.style.display)
-    if (elem.style.display == "none") {
-        elem.style.display = "block"
+    console.log($("#" + id).css('display'))
+    if (($("#" + id).css('display')) === "none") {
+        $("#" + id).css('display', "block");
     }
     else {
-        elem.style.display = "none"
+        $("#" + id).css('display', "none");
     }
 }

@@ -35,6 +35,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
+    bio = TextAreaField('Biography', validators=[DataRequired(), Length(min=10,max=200)])
     submit = InlineButtonWidget('Sign Up')
 
     def validate_username(self, username):
@@ -81,7 +82,7 @@ class AddProjectForm(FlaskForm):
     name = StringField('What is the name of the project?', validators=[DataRequired(), Length(min=2, max=40)])
     description = TextAreaField('Give a short description about the project.', validators=[DataRequired(), Length(min=10, max=200)])
     year = IntegerField('Year', validators=[DataRequired(), NumberRange(1900,datetime.datetime.now().year)])
-    url = URLField('URL of Project')
+    url = URLField('URL of Project', validators=[DataRequired()])
 
 
 class UpdateProfileForm(FlaskForm):

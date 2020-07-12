@@ -1,10 +1,10 @@
 {% extends "navbar.html" %}
 {% block content %}
 
-<button onclick="show('project-form')" style="margin-top: 10px; margin-bottom: 10px;" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></button>
+<button onclick="show('project-form')" id="button1" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></button>
 
 
-<form id="project-form" style="display: none;" action="" method="POST">
+<form id="project-form" class="dispn" action="" method="POST">
     {{ form.hidden_tag() }}
 
 <div class="row">
@@ -86,24 +86,24 @@
 </form>
 
 
-
+{% for project in projects %}
 <div class="row">
-    <div class="col s12 m4">
+    <div class="col s12 m12">
         <div class="card white">
             <div class="card-content black-text">
-                <span class="card-title">((Project Name))</span>
-                <p>Description: ((description))</p>
-                <p>Year: ((date thing))</p>
-                <p>Url: ((url thing))</p>
+                <span class="card-title">{{ project.name }}</span>
+                <p>Description: {{ project.description }}</p>
+                <p>Year: {{ project.year }}</p>
             </div>
             <div class="card-action">
-                <a href="#">Edit Info</a>
+                <button onclick="window.open('{{ project.url }}')" class="btn waves-effect red">View Project</button>
+                <a href="{{ url_for('edit_projects', id=project.id) }}">Edit Info</a>
             </div>
         </div>
     </div>
 </div>
 
-
+{% endfor %}
 
 
 {% endblock content %}

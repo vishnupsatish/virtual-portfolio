@@ -5,18 +5,19 @@
     <nav class="red">
         <div class="nav-wrapper">
             <!--<a style="margin-left: 20px;" href="{{ url_for('home') }}" class="brand-logo">Logo</a>-->
-            <a style="margin-left: 20px;" class="brand-logo" href="{{ url_for('home') }}"><img class="image-logo" src="{{ url_for('static', filename='images/logo_name.png') }}"></a>
+            <a class="brand-logo ml-20" href="{{ url_for('home') }}"><img class="image-logo" src="{{ url_for('static', filename='images/logo_name.png') }}"></a>
 
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('static_site') }}">Preview Site</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
                 {% if current_user.admin %}
                 <li><a class="btn red waves-effect" href="/admin">Admin</a></li>
                 {% endif %}
                 {% else %}
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-
+                <li><a href="url_for('login')">Log In</a></li>
                 <li><a class="btn red waves-effect" href="{{ url_for('register') }}">Register</a></li>
                 {% endif %}
             </ul>
