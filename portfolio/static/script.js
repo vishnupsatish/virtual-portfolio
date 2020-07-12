@@ -9,6 +9,12 @@ $(document).ready(function () {
     $("#job-form").css('display', "none");
     $("#achievement-form").css('display', "none");
     $("#project-form").css('display', "none");
+    $(".dropdown-trigger").dropdown();
+    $('.sidenav').sidenav();
+    $('.modal').modal();
+    $('select').formSelect();
+
+
 });
 
 function show(id) {

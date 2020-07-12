@@ -2,7 +2,7 @@ from flask import Markup
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from wtforms.fields.html5 import URLField, IntegerField
 from wtforms_components import ColorField
@@ -96,3 +96,23 @@ class ColorForm(FlaskForm):
     color = ColorField("Choose your theme color.", validators=[DataRequired()])
     text_color = ColorField("Choose your text color.", validators=[DataRequired()])
     submit = InlineButtonWidget('Save colors')
+
+
+
+# image_choices = [('Image0.jpg', 'Scenic Lake with Mountains'), 
+#                 ('Image1.jpg', 'Hummingbird'), 
+#                 ('Image2.jpg', 'Leaves'),
+#                 ('Image3.jpg' , 'Bridge and Forest'),
+#                 ('Image4.jpg' , 'Beach Drink'),
+#                 ('Image5.jpg' , 'Sunset Beach'),
+#                 ('Image6.jpg' , 'Tea and Book'), 
+#                 ('Image7.jpg' , 'Suit and Tie'),
+#                 ('Image8.jpg' , 'Yoga Sunset'),
+#                 ('Image9.jpg' , 'Graduation')]
+
+
+# class PictureForm(FlaskForm):
+#     picture1 = SelectField('Select a picture', choices=image_choices, validators=[DataRequired()]) # label can be changed
+#     picture2 = SelectField('Select a picture', choices=image_choices, validators=[DataRequired()]) # label can be changed
+#     picture3 = SelectField('Select a picture', choices=image_choices, validators=[DataRequired()]) # label can be changed
+#     submit = InlineButtonWidget('Save Pictures')

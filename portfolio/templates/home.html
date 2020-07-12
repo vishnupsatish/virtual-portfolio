@@ -1,7 +1,10 @@
 {% extends "navbar.html" %}
 {% block content %}
 
+
 <h1>Welcome, {{ current_user.name }}</h1>
+
+<h4  class="circle"style="border:solid;">Your Token: {{ current_user.token }}</h4>
 
 <form action="" method="POST" enctype="multipart/form-data" id="updateForm">{{ form.hidden_tag() }}</form>
 <form action="/delete_resume" method="POST" id="deleteResumeForm"></form>
@@ -54,7 +57,7 @@
         <div class="dispf">
           <button type="submit" form="deleteResumeForm" class="btn red white-text">Delete Resume</button>
           <p class="ml-20"><a target="_blank" rel="noopener noreferrer"
-              href="https://res.cloudinary.com/{{ cloud_name }}/image/upload/{{ current_user.resume }}.pdf">{{ current_user.resume }}.pdf</a>
+              href="https://res.cloudinary.com/{{ cloud_name }}/image/upload/portfolio/resume/{{ current_user.resume }}.pdf">{{ current_user.resume }}.pdf</a>
           </p>
         </div>
         {% endif %}
@@ -178,9 +181,8 @@
 
 {% endif %}
 <div class="center-align">
-  <a class="waves-effect waves-light red btn-large" href="{{ url_for('projects') }}"><i
+  <a class="waves-effect waves-light red btn-large mb-20" href="{{ url_for('projects') }}"><i
       class="material-icons left">assignment_turned_in</i>Manage Projects</a>
 </div>
-
 
 {% endblock content %}

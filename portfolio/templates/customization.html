@@ -3,11 +3,15 @@
 {% block content %}
 <h1>Page Customization</h1>
 
+<h4 class='mt-20'>Choose colors</h4>
+
+
+
 <form action="" method="POST">
     {{ color_form.hidden_tag() }}
 
     <div class="row">
-        <p>Choose a theme colour</p>
+        <p>Choose a theme color</p>
 
         <div class="input-field col m6 s6">
             <i class="material-icons prefix lh-025">description</i>
@@ -25,7 +29,7 @@
     </div>
 
     <div class="row">
-        <p>Choose a text colour</p>
+        <p>Choose a text color</p>
 
         <div class="input-field col m6 s6">
             <i class="material-icons prefix lh-025">format_color_text</i>
@@ -45,6 +49,68 @@
     <div class="form-group white-text">
         {{ color_form.submit(class="btn red waves-effect white-text") }}
     </div>
+
+
 </form>
 
-{% endblock %}
+<h4 class='mt-45'>Choose background pictures</h4>
+
+<form action="/change_background_images" method="POST">
+    <div class="input-field col s12 m6 mt-45    ">
+        <select class="icons" required name="background1">
+            <option value="Image0.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image0.jpg">Scenic Lake with Mountains</option>
+            <option value="Image1.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image1.jpg">Hummingbird</option>
+            <option value="Image2.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image2.jpg">Leaves</option>
+            <option value="Image3.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image3.jpg">Bridge and Forest</option>
+            <option value="Image4.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image4.jpg">Beach Drink</option>
+            <option value="Image5.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image5.jpg">Sunset Beach</option>
+            <option value="Image6.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image6.jpg">Tea and Book</option>
+            <option value="Image7.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image7.jpg">Suit and Tie</option>
+            <option value="Image8.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image8.jpg">Yoga Sunset</option>
+            <option value="Image9.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image9.jpg">Graduation</option>
+
+        </select>
+        <label>Choose Background Image 1</label>
+    </div>
+    <div class="input-field col s12 m6 mt-45">
+        <select class="icons" required name="background2">
+            <option value="Image0.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image0.jpg">Scenic Lake with Mountains</option>
+            <option value="Image1.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image1.jpg">Hummingbird</option>
+            <option value="Image2.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image2.jpg">Leaves</option>
+            <option value="Image3.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image3.jpg">Bridge and Forest</option>
+            <option value="Image4.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image4.jpg">Beach Drink</option>
+            <option value="Image5.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image5.jpg">Sunset Beach</option>
+            <option value="Image6.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image6.jpg">Tea and Book</option>
+            <option value="Image7.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image7.jpg">Suit and Tie</option>
+            <option value="Image8.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image8.jpg">Yoga Sunset</option>
+            <option value="Image9.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image9.jpg">Graduation</option>
+
+        </select>
+        <label>Choose Background Image 2</label>
+    </div>
+    <div class="input-field col s12 m6 mt-45">
+        <select class="icons" required name="background3">
+            <option value="Image0.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image0.jpg">Scenic Lake with Mountains</option>
+            <option value="Image1.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image1.jpg">Hummingbird</option>
+            <option value="Image2.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image2.jpg">Leaves</option>
+            <option value="Image3.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image3.jpg">Bridge and Forest</option>
+            <option value="Image4.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image4.jpg">Beach Drink</option>
+            <option value="Image5.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image5.jpg">Sunset Beach</option>
+            <option value="Image6.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image6.jpg">Tea and Book</option>
+            <option value="Image7.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image7.jpg">Suit and Tie</option>
+            <option value="Image8.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image8.jpg">Yoga Sunset</option>
+            <option value="Image9.jpg" data-icon="https://res.cloudinary.com/{{ cloud_name }}/image/upload/v1594563277/portfolio/image/upload/Image9.jpg">Graduation</option>
+
+        </select>
+        <label>Choose Background Image 3</label>
+        <button class='btn red waves-effect mt-20' type="submit">Save Background Images</button>
+    </div>
+</form>
+
+<h3>Your current background images</h3>
+<img class="show-current-background-images mb-20" src="https://res.cloudinary.com/dnwczwamg/image/upload/portfolio/image/upload/{{ current_user.background1 }}">
+<img class="show-current-background-images mb-20" src="https://res.cloudinary.com/dnwczwamg/image/upload/portfolio/image/upload/{{ current_user.background2 }}">
+<img class="show-current-background-images mb-20" src="https://res.cloudinary.com/dnwczwamg/image/upload/portfolio/image/upload/{{ current_user.background3 }}">
+
+
+    {% endblock %}

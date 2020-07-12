@@ -1,7 +1,15 @@
 {% extends "layout.html" %}
 
 {% block navbar %}
+
+<ul id="dropdown1" class="dropdown-content">
+    <li><a href="{{ url_for('jobs') }}">Jobs</a></li>
+    <li><a href="{{ url_for('achievements') }}">Achievements</a></li>
+    <li><a href="{{ url_for('projects') }}">Projects</a></li>
+  </ul>
+
 <div class="navbar-fixed">
+
     <nav class="red">
         <div class="nav-wrapper">
             <!--<a style="margin-left: 20px;" href="{{ url_for('home') }}" class="brand-logo">Logo</a>-->
@@ -12,12 +20,11 @@
             <ul class="right hide-on-med-and-down">
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Manage<i class="material-icons right">arrow_drop_down</i></a></li>
                 <li><a href="{{ url_for('static_site', username=current_user.username) }}">Preview Site</a></li>
                 <li><a href="{{ url_for('customization') }}">Customization</a></li>
+                <li><a href="{{ url_for('how_it_works') }}">How it works</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                {% if current_user.admin %}
-                <li><a class="btn red waves-effect" href="/admin">Admin</a></li>
-                {% endif %}
                 {% else %}
                 <li><a href="{{ url_for('login') }}">Log In</a></li>
                 <li><a class="btn red waves-effect" href="{{ url_for('register') }}">Register</a></li>
@@ -27,15 +34,21 @@
     </nav>
 </div>
 
+<ul id="dropdown-m" class="dropdown-content">
+    <li><a href="{{ url_for('jobs') }}">Jobs</a></li>
+    <li><a href="{{ url_for('achievements') }}">Achievements</a></li>
+    <li><a href="{{ url_for('projects') }}">Projects</a></li>
+  </ul>
+
 <ul class="sidenav" id="mobile-demo">
     {% if current_user.is_authenticated %}
     <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li><a class="dropdown-trigger" href="#!" data-target="dropdown-m">Manage<i class="material-icons right">arrow_drop_down</i></a></li>
+
     <li><a href="{{ url_for('static_site', username=current_user.username) }}">Preview Site</a></li>
     <li><a href="{{ url_for('customization') }}">Customization</a></li>
+    <li><a href="{{ url_for('how_it_works') }}">How it works</a></li>
     <li><a href="{{ url_for('logout') }}">Logout</a></li>
-    {% if current_user.admin %}
-    <li><a href="/admin">Admin</a></li>
-    {% endif %}
     {% else %}
     <li><a href="{{ url_for('login') }}">Log In</a></li>
     <li><a href="{{ url_for('register') }}">Register</a></li>

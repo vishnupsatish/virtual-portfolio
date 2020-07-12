@@ -22,9 +22,9 @@ class User(db.Model, UserMixin):
     resume = db.Column(db.String)
     theme_color = db.Column(db.String, default="red")
     text_color = db.Column(db.String, default="white")
-    background1 = db.Column(db.String, default="default1.png")
-    background2 = db.Column(db.String, default="default2.png")
-    background3 = db.Column(db.String, default="default3.png")
+    background1 = db.Column(db.String, default="Image1.png")
+    background2 = db.Column(db.String, default="Image2.png")
+    background3 = db.Column(db.String, default="Image3.png")
     jobs = db.relationship('Job', backref='employee', lazy=True)
     achievements = db.relationship('Achievement', backref='winner', lazy=True)
     projects = db.relationship('Project', backref='creator', lazy=True)
@@ -44,7 +44,7 @@ class Job(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
     def __repr__(self):
-        return f"Job('{self.company_name}', '{self.category}', '{self.employee}')"
+        return f"Job('{self.company_name}', '{self.role}', '{self.employee}')"
 
 class Achievement(db.Model):
     id = db.Column(db.Integer, primary_key=True)

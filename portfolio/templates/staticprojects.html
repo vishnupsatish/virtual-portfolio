@@ -10,10 +10,10 @@
 
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="{{ url_for('static_site', username=current_user.username) }}">Home</a></li>
-        <li><a href="{{ url_for('staticjobs', username=current_user.username) }}">Jobs</a></li>
-        <li><a href="{{ url_for('staticachievements', username=current_user.username) }}">Achievements</a></li>
-        <li><a href="{{ url_for('staticprojects', username=current_user.username) }}">Projects</a></li>
+        <li><a style="color: {{ current_user.text_color }};" href="{{ url_for('static_site', username=current_user.username) }}">Home</a></li>
+        <li><a style="color: {{ current_user.text_color }};" href="{{ url_for('staticjobs', username=current_user.username) }}">Jobs</a></li>
+        <li><a style="color: {{ current_user.text_color }};" href="{{ url_for('staticachievements', username=current_user.username) }}">Achievements</a></li>
+        <li><a style="color: {{ current_user.text_color }};" href="{{ url_for('staticprojects', username=current_user.username) }}">Projects</a></li>
       </ul>
     </div>
   </nav>

@@ -4,6 +4,7 @@ import secrets
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import json
 from flask import render_template, url_for, flash, redirect, request, abort
 from portfolio import app, db, bcrypt
 from portfolio.forms import (RegistrationForm, LoginForm, AddJobForm, AddAchievementForm, AddProjectForm, UpdateProfileForm, ColorForm)
@@ -11,6 +12,7 @@ from portfolio.models import User, Job, Achievement, Project
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
 import io
+from colour import Color
 
 cloud_name = os.environ['CLOUDINARY_CLOUD_NAME']
 api_key = os.environ['CLOUDINARY_API_KEY']
@@ -37,7 +39,7 @@ def home():
         if form.resume.data:
             pdf_name = secrets.token_hex(16)
             current_user.resume = pdf_name
-            cloudinary.uploader.upload(form.resume.data, public_id=pdf_name)
+            cloudinary.uploader.upload(form.resume.data, public_id=f"portfolio/resume/{pdf_name}")
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('home'))
@@ -47,15 +49,31 @@ def home():
 
 @app.route('/customization', methods=["GET", 'POST'])
 @login_required
-
 def customization():
     color_form = ColorForm()
     if color_form.validate_on_submit():
         current_user.text_color = str(color_form.text_color.data)
         current_user.theme_color = str(color_form.color.data)
         db.session.commit()
+        flash('Your changes have been saved.', 'success')
         return redirect(url_for('customization'))
-    return render_template('customization.html', color_form=color_form)
+    else:
+        color_form.text_color.data = current_user.text_color
+        print(color_form.text_color.data)
+        color_form.color.data = current_user.theme_color
+    return render_template('customization.html', color_form=color_form, cloud_name=cloud_name, current_user=current_user)
+
+
+@app.route('/change_background_images', methods=['POST'])
+def change_background_images():
+    if not current_user.is_authenticated:
+        return redirect(url_for('home'))
+    current_user.background1 = request.values.get('background1')
+    current_user.background2 = request.values.get('background2')
+    current_user.background3 = request.values.get('background3')    
+    db.session.commit()
+    flash('Your background images have been updated! View them my clicking "Preview Site".', 'success')
+    return redirect(url_for('customization'))
 
 
 @app.route('/delete_resume', methods=['POST'])
@@ -64,7 +82,7 @@ def delete_resume():
         return redirect(url_for('home'))
     if current_user.resume == "":
         return redirect(url_for('home'))
-    cloudinary.uploader.destroy(current_user.resume)
+    cloudinary.uploader.destroy(f"portfolio/resume/{current_user.resume}")
     current_user.resume = ""
     db.session.commit()
     flash('Your resume has been deleted.', 'info')
@@ -153,8 +171,6 @@ def login():
 
 
 
-
-
 @app.route('/edit/project/<int:id>', methods=["GET", 'POST'])
 @login_required
 def edit_projects(id):
@@ -176,9 +192,10 @@ def edit_projects(id):
     form.url.data = project.url
     return render_template('edit_projects.html', form=form)
     
+
+
 @app.route('/edit/job/<int:id>', methods=["GET", 'POST'])
 @login_required
-
 def edit_jobs(id):
     job = Job.query.filter_by(id=id).first_or_404()
     if job.employee != current_user:
@@ -203,6 +220,48 @@ def edit_jobs(id):
     form.volunteer.data = job.volunteer
     return render_template("edit_jobs.html", form=form)
 
+
+@app.route('/delete/job/<int:id>')
+def delete_jobs(id):
+    if not current_user.is_authenticated:
+        abort(403)
+    job = Job.query.filter_by(id=id).first_or_404()
+    if job.employee != current_user:
+        abort(403)
+    db.session.delete(job)
+    db.session.commit()
+    flash('Your job has been deleted.', 'success')
+    return redirect(url_for('jobs'))
+
+
+@app.route('/delete/achievement/<int:id>')
+def delete_achievements(id):
+    if not current_user.is_authenticated:
+        abort(403)
+    achievement = Achievement.query.filter_by(id=id).first_or_404()
+    if achievement.winner != current_user:
+        abort(403)
+    db.session.delete(achievement)
+    db.session.commit()
+    flash('Your achievement has been deleted.', 'success')
+    return redirect(url_for('achievements'))
+
+
+@app.route('/delete/project/<int:id>')
+def delete_projects(id):
+    if not current_user.is_authenticated:
+        abort(403)
+    project = Project.query.filter_by(id=id).first_or_404()
+    if project.creator != current_user:
+        abort(403)
+    db.session.delete(project)
+    db.session.commit()
+    flash('Your project has been deleted.', 'success')
+    return redirect(url_for('projects'))
+    
+    
+
+
 @app.route('/edit/achievement/<int:id>', methods=["GET", 'POST'])
 @login_required
 def edit_achievements(id):
@@ -226,22 +285,22 @@ def edit_achievements(id):
 @app.route('/static_site/<username>')
 def static_site(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('static_site.html', current_user=user, page_title=user.name, cloud_name=cloud_name)
+    return render_template('static_site.html', user_visiting=current_user, current_user=user, page_title=user.name, cloud_name=cloud_name)
 
 @app.route('/static_site/jobs/<username>')
 def staticjobs(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('staticjobs.html', page_title=user.name, jobs=user.jobs, current_user=user)
+    return render_template('staticjobs.html', user_visiting=current_user, page_title=user.name, jobs=user.jobs, current_user=user)
 
 @app.route('/static_site/achievements/<username>')
 def staticachievements(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('staticachievements.html', page_title=user.name, achievements=user.achievements, current_user=user)
+    return render_template('staticachievements.html', user_visiting=current_user, page_title=user.name, achievements=user.achievements, current_user=user)
 
 @app.route('/static_site/projects/<username>')
 def staticprojects(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('staticprojects.html', page_title=user.name, projects=user.projects, current_user=user)
+    return render_template('staticprojects.html', user_visiting=current_user, page_title=user.name, projects=user.projects, current_user=user)
 
 
 @app.route("/logout")
@@ -251,3 +310,57 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+
+@app.route('/how_it_works')
+def how_it_works():
+    return render_template('how_it_works.html')
+
+# API starts below
+
+@app.route('/api/get_all_info/<string:token>')
+def get_all_info(token):
+    user = User.query.filter_by(token=token).first_or_404()
+    jobs = Job.query.filter_by(employee=user)
+    achievements = Achievement.query.filter_by(winner=user)
+    projects = Project.query.filter_by(creator=user)
+    d = dict()
+    d['username'] = user.username
+    d['name'] = user.name
+    d['email'] = user.email
+    d['bio'] = user.bio
+    if user.resume:
+        d['resume'] = f"https://res.cloudinary.com/{cloud_name}/image/upload/portfolio/resume/{user.resume}.pdf"
+    else:
+        d['resume'] = ""
+    d['skills'] = []
+    d['jobs'] = []
+    d['achievements'] = []
+    d['projects'] = []
+    d['website'] = f"/static_site/{user.username}"
+    for skill in user.skills.split(','):
+        d['skills'].append(skill)
+    for job in jobs:
+        if job.end_date:
+            d['jobs'].append({'company_name': job.company_name,
+            'start_date': job.start_date,
+            'end_date': job.end_date,
+            'role': job.role,
+            'description': job.description,
+            'paid': not job.volunteer})
+        else:
+            d['jobs'].append({'company_name': job.company_name,
+            'start_date': job.start_date,
+            'end_date': "Present",
+            'role': job.role,
+            'description': job.description,
+            'paid': not job.volunteer})
+    for project in projects:
+        d['projects'].append({'name': project.name,
+            'year': project.year,
+            'url': project.url,
+            'description': project.description})
+    for achievement in achievements:
+        d['achievements'].append({'name': achievement.name,
+            'year': achievement.year,
+            'description': achievement.description})
+    return d
