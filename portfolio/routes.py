@@ -6,7 +6,7 @@ import cloudinary.uploader
 import cloudinary.api
 from flask import render_template, url_for, flash, redirect, request, abort
 from portfolio import app, db, bcrypt
-from portfolio.forms import (RegistrationForm, LoginForm, AddJobForm, AddAchievementForm, AddProjectForm, UpdateProfileForm)
+from portfolio.forms import (RegistrationForm, LoginForm, AddJobForm, AddAchievementForm, AddProjectForm, UpdateProfileForm, ColorForm)
 from portfolio.models import User, Job, Achievement, Project
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
@@ -21,7 +21,6 @@ cloudinary.config(
     api_key=api_key,
     api_secret=api_secret
 )
-
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -46,6 +45,19 @@ def home():
     return render_template('home.html', page_title="Home", form=form, current_user=current_user, cloud_name=cloud_name)
 
 
+@app.route('/customization', methods=["GET", 'POST'])
+@login_required
+
+def customization():
+    color_form = ColorForm()
+    if color_form.validate_on_submit():
+        current_user.text_color = str(color_form.text_color.data)
+        current_user.theme_color = str(color_form.color.data)
+        db.session.commit()
+        return redirect(url_for('customization'))
+    return render_template('customization.html', color_form=color_form)
+
+
 @app.route('/delete_resume', methods=['POST'])
 def delete_resume():
     if not current_user.is_authenticated:
@@ -60,6 +72,7 @@ def delete_resume():
 
 
 @app.route('/jobs', methods=['GET', 'POST'])
+@login_required
 def jobs():
     form = AddJobForm()
     if form.validate_on_submit():
@@ -67,30 +80,35 @@ def jobs():
         employee=current_user, start_date=datetime.datetime.strptime(form.start_date.data, "%b %d, %Y"), end_date=datetime.datetime.strptime(form.end_date.data, "%b %d, %Y"), volunteer=form.volunteer.data, role=form.role.data) if form.end_date.data != "" else Job(company_name=form.name.data, description=form.description.data, employee=current_user, start_date=datetime.datetime.strptime(form.start_date.data, "%b %d, %Y"), volunteer=form.volunteer.data, role=form.role.data)
         db.session.add(job)
         db.session.commit()
+        flash('Your job has been added!', 'success')
         return redirect(url_for('jobs'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
     return render_template('jobs.html', form=form, jobs=current_user.jobs)
 
 @app.route('/achievements', methods=['GET', 'POST'])
+@login_required
 def achievements():
     form = AddAchievementForm()
     if form.validate_on_submit():
         achievement = Achievement(name=form.name.data, description=form.description.data, year=form.year.data, winner=current_user)
         db.session.add(achievement)
         db.session.commit()
+        flash('Your achievement has been added!', 'success')
         return redirect(url_for('achievements'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
     return render_template('achievements.html', page_title='Achievements', form=form, achievements=current_user.achievements)
 
 @app.route('/projects', methods=['GET', 'POST'])
+@login_required
 def projects():
     form = AddProjectForm()
     if form.validate_on_submit():
         project = Project(name=form.name.data, year=form.year.data, url=form.url.data, description=form.description.data, creator=current_user)
         db.session.add(project)
         db.session.commit()
+        flash('Your project has been added!', 'success')
         return redirect(url_for('projects'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
@@ -133,23 +151,12 @@ def login():
     return render_template('login.html', page_title='Login', form=form)
 
 
-@app.route('/static_site')
-def static_site():
-    return render_template('static_site.html', page_title=current_user.name, current_user=current_user)
 
-@app.route('/static_site/jobs')
-def staticjobs():
-    return render_template('staticjobs.html', page_title=current_user.name, jobs=current_user.jobs)
 
-@app.route('/static_site/achievements')
-def staticachievements():
-    return render_template('staticachievements.html', page_title=current_user.name, achievements=current_user.achievements)
 
-@app.route('/static_site/projects')
-def staticprojects():
-    return render_template('staticprojects.html', page_title=current_user.name, projects=current_user.projects)
 
 @app.route('/edit/project/<int:id>', methods=["GET", 'POST'])
+@login_required
 def edit_projects(id):
     project = Project.query.filter_by(id=id).first_or_404()
     if project.creator != current_user:
@@ -162,7 +169,7 @@ def edit_projects(id):
         project.url = form.url.data
         db.session.commit()
         flash('Your changes have been made.', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('projects'))
     form.name.data = project.name
     form.description.data = project.description
     form.year.data = project.year
@@ -170,6 +177,8 @@ def edit_projects(id):
     return render_template('edit_projects.html', form=form)
     
 @app.route('/edit/job/<int:id>', methods=["GET", 'POST'])
+@login_required
+
 def edit_jobs(id):
     job = Job.query.filter_by(id=id).first_or_404()
     if job.employee != current_user:
@@ -185,7 +194,7 @@ def edit_jobs(id):
         job.volunteer = form.volunteer.data
         db.session.commit()
         flash('Your changes have been made.', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('jobs'))
     form.name.data = job.company_name
     form.role.data = job.role
     form.description.data = job.description
@@ -195,6 +204,7 @@ def edit_jobs(id):
     return render_template("edit_jobs.html", form=form)
 
 @app.route('/edit/achievement/<int:id>', methods=["GET", 'POST'])
+@login_required
 def edit_achievements(id):
     achievement = Achievement.query.filter_by(id=id).first_or_404()
     if achievement.winner != current_user:
@@ -206,19 +216,38 @@ def edit_achievements(id):
         achievement.year = form.year.data
         db.session.commit()
         flash('Your changes have been made.', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('achievements'))
     form.name.data = achievement.name
     form.description.data = achievement.description
     form.year.data = achievement.year
     return render_template('edit_achievements.html', form=form)
 
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
+@app.route('/static_site/<username>')
+def static_site(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('static_site.html', current_user=user, page_title=user.name, cloud_name=cloud_name)
+
+@app.route('/static_site/jobs/<username>')
+def staticjobs(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('staticjobs.html', page_title=user.name, jobs=user.jobs, current_user=user)
+
+@app.route('/static_site/achievements/<username>')
+def staticachievements(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('staticachievements.html', page_title=user.name, achievements=user.achievements, current_user=user)
+
+@app.route('/static_site/projects/<username>')
+def staticprojects(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('staticprojects.html', page_title=user.name, projects=user.projects, current_user=user)
+
 
 @app.route("/logout")
 def logout():
+    if not current_user.is_authenticated:
+        return redirect(url_for('home'))
     logout_user()
     return redirect(url_for('login'))
 

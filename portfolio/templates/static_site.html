@@ -3,22 +3,24 @@
 {% block navbar %}
 
 <div class="navbar-fixed">
-    <nav class="red">
+    <nav style="background-color: {{ current_user.theme_color }};">
         <div class="nav-wrapper">
             <a class="brand-logo ml-20" href="{{ url_for('home') }}"><img class="image-logo"
                     src="{{ url_for('static', filename='images/logo_name.png') }}"></a>
 
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="#">Home</a></li>
-                <li><a href="#jobs">Jobs</a></li>
-                <li><a href="#achievements">Achievements</a></li>
-                <li><a href="#projects">Projects</a></li>
+                {% if current_user.is_authenicated %}
+                <li><a href="{{ url_for('home') }}">Manage Your Site</a></li>
+                {% endif %}
+                <li><a style="color: {{ current_user.text_color }};" href="#">Home</a></li>
+                <li><a style="color: {{ current_user.text_color }};" href="#jobs">Jobs</a></li>
+                <li><a style="color: {{ current_user.text_color }};" href="#achievements">Achievements</a></li>
+                <li><a style="color: {{ current_user.text_color }};" href="#projects">Projects</a></li>
             </ul>
         </div>
     </nav>
 </div>
-
 
 
 <div class="section grey lighten-2" id="biography">
@@ -26,21 +28,27 @@
         <h1>{{ current_user.name }}</h1>
         <div class="row">
             <div class="col s12">
-                <div class="card-panel red lighten-1 pt-2">
-                    <h3 class="white-text">Profile</h3>
+                <div style="background-color: {{ current_user.theme_color }};" class="card-panel lighten-1 pt-2">
+                    <h3 style="color: {{ current_user.text_color }};">Profile</h3>
                     <div class="mb-20">
-                    {% if current_user.skills %}
-                    <h5 class="white-text">Skills</h5>
-                    {% for skill in current_user.skills.split(',') %}
-                    <div class="chip"> {{ skill }} </div> <!--Pranav put the magic here -->
-                    {% endfor %}
-                    {% endif %}
+                        {% if current_user.skills %}
+                        <h5 style="color: {{ current_user.text_color }};">Skills</h5>
+                        {% for skill in current_user.skills.split(',') %}
+                        <div class="chip"> {{ skill }} </div>
+                        {% endfor %}
+                        {% endif %}
                     </div>
-                    <h5 class="white-text">Biography</h5>
+                    <h5 style="color: {{ current_user.text_color }};">Biography</h5>
                     {% if current_user.bio %}
-                    <span class="white-text mt-20">{{ current_user.bio }}</span>
+                    <span style="color: {{ current_user.text_color }};" class="mt-20">{{ current_user.bio }}</span>
                     {% else %}
-                    <span class="white-text mt-20">This user has not added a bio yet.</span>
+                    <span style="color: {{ current_user.text_color }};" class="mt-20">This user has not added a bio yet.</span>
+                    {% endif %}
+                    <h5 style="color: {{ current_user.text_color }}">Resume</h5>
+                    {% if current_user.resume %}
+                    <iframe id="pdfviewer" src="https://res.cloudinary.com/{{ cloud_name }}/image/upload/{{ current_user.resume }}.pdf#toolbar=0">Click to view resume</iframe>
+                    {% else %}
+                    <span style="color: {{ current_user.text_color }};" class="mt-20">This user has not added a resume yet.</span>
                     {% endif %}
                 </div>
             </div>
@@ -66,8 +74,8 @@
             <a class="carousel-item">
                 <div class="row">
                     <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
+                        <div style="background-color: {{ current_user.theme_color }};" class="card lighten-1">
+                            <div style="color: {{ current_user.text_color }};" class="card-content">
                                 <span class="card-title">{{ job.company_name }}</span>
                                 <p>Role: {{ job.role }}</p>
                                 <p>Start Date: {{ job.start_date.strftime('%d %b, %Y') }}</p>
@@ -85,7 +93,7 @@
             {% endfor %}
         </div>
         <div class="center-align">
-            <a class="waves-effect waves-light red btn-large" href="{{ url_for('staticjobs') }}"><i
+            <a style="background-color: {{ current_user.theme_color }};" class="waves-effect waves-light btn-large" href="{{ url_for('staticjobs', username=current_user.username) }}"><i
                     class="material-icons left">business</i>View all Jobs</a>
         </div>
     </div>
@@ -112,8 +120,8 @@
             <a class="carousel-item">
                 <div class="row">
                     <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
+                        <div style="background-color: {{ current_user.theme_color }};" class="card lighten-1">
+                            <div style="color: {{ current_user.text_color }};" class="card-content">
                                 <span class="card-title">{{ achievement.name }}</span>
                                 <p>Year: {{ achievement.year }}</p>
                                 <p>Description: {{ achievement.description }}</p>
@@ -125,7 +133,7 @@
             {% endfor %}
         </div>
         <div class="center-align">
-            <a class="waves-effect waves-light red btn-large" href="{{ url_for('staticachievements') }}"><i
+            <a style="background-color: {{ current_user.theme_color }};" class="waves-effect waves-light btn-large" href="{{ url_for('staticachievements', username=current_user.username) }}"><i
                     class="material-icons left">assistant_photo</i>View all Achievements</a>
         </div>
     </div>
@@ -150,15 +158,16 @@
             <a class="carousel-item">
                 <div class="row">
                     <div class="col s12">
-                        <div class="card red lighten-1">
-                            <div class="card-content white-text">
+                        <div style="background-color: {{ current_user.theme_color }};" class="card lighten-1">
+                            <div style="color: {{ current_user.text_color }};" class="card-content">
                                 <span class="card-title">{{ project.name }}</span>
                                 <p>Year: {{ project.year }}</p>
                                 <p>{{ project.description }}</p>
                             </div>
                             <div class="card-action">
-                                <button onclick="window.open('{{ project.url }}')" class="btn waves-effect red">View Project</button>
-                              </div>
+                                <button style="background-color: {{ current_user.theme_color }};" onclick="window.open('{{ project.url }}')" class="btn waves-effect">View
+                                    Project</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,7 +175,7 @@
             {% endfor %}
         </div>
         <div class="center-align">
-            <a class="waves-effect waves-light red btn-large" href="{{ url_for('staticprojects') }}"><i
+            <a style="background-color: {{ current_user.theme_color }};" class="waves-effect waves-light btn-large" href="{{ url_for('staticprojects', username=current_user.username) }}"><i
                     class="material-icons left">assistant_photo</i>View all Projects</a>
         </div>
     </div>

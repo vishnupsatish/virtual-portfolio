@@ -3,17 +3,17 @@
 {% block navbar %}
 
 <div class="navbar-fixed">
-  <nav class="red">
+  <nav style="background-color: {{ current_user.theme_color }};">
     <div class="nav-wrapper">
       <a class="brand-logo ml-20" href="{{ url_for('home') }}"><img class="image-logo"
           src="{{ url_for('static', filename='images/logo_name.png') }}"></a>
 
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="{{ url_for('static_site') }}">Home</a></li>
-        <li><a href="{{ url_for('staticjobs') }}">Jobs</a></li>
-        <li><a href="{{ url_for('staticachievements') }}">Achievements</a></li>
-        <li><a href="{{ url_for('staticprojects') }}">Projects</a></li>
+        <li><a href="{{ url_for('static_site', username=current_user.username) }}">Home</a></li>
+        <li><a href="{{ url_for('staticjobs', username=current_user.username) }}">Jobs</a></li>
+        <li><a href="{{ url_for('staticachievements', username=current_user.username) }}">Achievements</a></li>
+        <li><a href="{{ url_for('staticprojects', username=current_user.username) }}">Projects</a></li>
       </ul>
     </div>
   </nav>
@@ -22,24 +22,24 @@
 
 <div class="container">
   <h1>Projects</h1>
-  
+
   {% for project in projects %}
 
   <div class="row">
     <div class="col s12">
-      <div class="card red lighten-1">
-        <div class="card-content white-text">
+      <div style="background-color: {{ current_user.theme_color }};" class="card lighten-1">
+        <div style="color: {{ current_user.text_color }};" class="card-content">
           <span class="card-title">{{ project.name }}</span>
           <p>Description: {{ project.description }}</p>
           <p>Year: {{ project.year }}</p>
         </div>
         <div class="card-action">
-          <button onclick="window.open('{{ project.url }}')" class="btn waves-effect red">View Project</button>
+          <button style="background-color: {{ current_user.theme_color }}; color: {{ current_user.text_color }};" onclick="window.open('{{ project.url }}')" class="btn waves-effect">View Project</button>
         </div>
       </div>
     </div>
   </div>
 
-{% endfor %}
+  {% endfor %}
 
-{% endblock %}
+  {% endblock %}

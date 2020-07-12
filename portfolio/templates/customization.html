@@ -1,0 +1,50 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+<h1>Page Customization</h1>
+
+<form action="" method="POST">
+    {{ color_form.hidden_tag() }}
+
+    <div class="row">
+        <p>Choose a theme colour</p>
+
+        <div class="input-field col m6 s6">
+            <i class="material-icons prefix lh-025">description</i>
+            {% if color_form.color.errors %}
+            {{ color_form.color(class="validate invalid") }}
+            <div class="invalid-feedback">
+                {% for error in color_form.color.errors %}
+                <span class="error-feedback">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ color_form.color(class="validate") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <p>Choose a text colour</p>
+
+        <div class="input-field col m6 s6">
+            <i class="material-icons prefix lh-025">format_color_text</i>
+            {% if color_form.text_color.errors %}
+            {{ color_form.text_color(class="validate invalid") }}
+            <div class="invalid-feedback">
+                {% for error in color_form.text_color.errors %}
+                <span class="error-feedback">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ color_form.text_color(class="validate") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="form-group white-text">
+        {{ color_form.submit(class="btn red waves-effect white-text") }}
+    </div>
+</form>
+
+{% endblock %}

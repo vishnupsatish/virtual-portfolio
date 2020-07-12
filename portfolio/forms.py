@@ -5,6 +5,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from wtforms.fields.html5 import URLField, IntegerField
+from wtforms_components import ColorField
 from portfolio.models import User
 import datetime
 
@@ -86,9 +87,12 @@ class AddProjectForm(FlaskForm):
 
 
 class UpdateProfileForm(FlaskForm):
-    bio = TextAreaField('Update your bio', validators=[DataRequired()])
-    skills = StringField('Add some of your skills (comma-separated)', validators=[DataRequired()])
+    bio = TextAreaField('Update your bio', validators=[Length(min=2, max=200)])
+    skills = StringField('Add some of your skills (comma-separated)', validators=[Length(min=2, max=80)])
     resume = FileField('Add/update a resume', validators=[FileAllowed(['pdf'])])
     submit = InlineButtonWidget('Submit Changes')
 
-
+class ColorForm(FlaskForm):
+    color = ColorField("Choose your theme color.", validators=[DataRequired()])
+    text_color = ColorField("Choose your text color.", validators=[DataRequired()])
+    submit = InlineButtonWidget('Save colors')
