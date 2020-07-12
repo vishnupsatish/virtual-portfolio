@@ -337,8 +337,9 @@ def get_all_info(token):
     d['achievements'] = []
     d['projects'] = []
     d['website'] = f"/static_site/{user.username}"
-    for skill in user.skills.split(','):
-        d['skills'].append(skill)
+    if user.skills:
+        for skill in user.skills.split(','):
+            d['skills'].append(skill)
     for job in jobs:
         if job.end_date:
             d['jobs'].append({'company_name': job.company_name,
