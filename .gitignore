@@ -1,2 +1,3 @@
 venv/
 portfolio/__pycache__
+portfolio/site.db
