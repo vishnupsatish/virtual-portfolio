@@ -23,7 +23,8 @@
                 <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Manage<i class="material-icons right">arrow_drop_down</i></a></li>
                 <li><a href="{{ url_for('static_site', username=current_user.username) }}">Preview Site</a></li>
                 <li><a href="{{ url_for('customization') }}">Customization</a></li>
-                <li><a href="{{ url_for('how_it_works') }}">How it works</a></li>
+                <li><a href="{{ url_for('how_it_works') }}">How It Works</a></li>
+                <li><a href="{{ url_for('api_docs') }}">API Reference</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
                 {% else %}
                 <li><a href="{{ url_for('login') }}">Log In</a></li>
@@ -47,7 +48,8 @@
 
     <li><a href="{{ url_for('static_site', username=current_user.username) }}">Preview Site</a></li>
     <li><a href="{{ url_for('customization') }}">Customization</a></li>
-    <li><a href="{{ url_for('how_it_works') }}">How it works</a></li>
+    <li><a href="{{ url_for('how_it_works') }}">How It Works</a></li>
+    <li><a href="{{ url_for('api_docs') }}">API Reference</a></li>
     <li><a href="{{ url_for('logout') }}">Logout</a></li>
     {% else %}
     <li><a href="{{ url_for('login') }}">Log In</a></li>

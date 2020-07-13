@@ -61,7 +61,7 @@ def customization():
         color_form.text_color.data = current_user.text_color
         print(color_form.text_color.data)
         color_form.color.data = current_user.theme_color
-    return render_template('customization.html', color_form=color_form, cloud_name=cloud_name, current_user=current_user)
+    return render_template('customization.html', color_form=color_form, cloud_name=cloud_name, current_user=current_user, page_title="Customization")
 
 
 @app.route('/change_background_images', methods=['POST'])
@@ -102,7 +102,7 @@ def jobs():
         return redirect(url_for('jobs'))
     elif (not form.validate_on_submit()) and request.method == "POST":
         flash('There has been an error. Click on the + button to see the error.', 'error')
-    return render_template('jobs.html', form=form, jobs=current_user.jobs)
+    return render_template('jobs.html', form=form, jobs=current_user.jobs, page_title="Jobs")
 
 @app.route('/achievements', methods=['GET', 'POST'])
 @login_required
@@ -190,7 +190,7 @@ def edit_projects(id):
     form.description.data = project.description
     form.year.data = project.year
     form.url.data = project.url
-    return render_template('edit_projects.html', form=form)
+    return render_template('edit_projects.html', form=form, page_title="Edit Project")
     
 
 
@@ -218,7 +218,7 @@ def edit_jobs(id):
     form.start_date.data = job.start_date.strftime("%b %d, %Y")
     form.end_date.data = job.end_date.strftime("%b %d, %Y") if job.end_date != None else ""
     form.volunteer.data = job.volunteer
-    return render_template("edit_jobs.html", form=form)
+    return render_template("edit_jobs.html", form=form, page_title="Edit Job")
 
 
 @app.route('/delete/job/<int:id>')
@@ -279,7 +279,7 @@ def edit_achievements(id):
     form.name.data = achievement.name
     form.description.data = achievement.description
     form.year.data = achievement.year
-    return render_template('edit_achievements.html', form=form)
+    return render_template('edit_achievements.html', form=form, page_title="Edit Achievement")
 
 
 @app.route('/static_site/<username>')
