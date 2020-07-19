@@ -44,6 +44,7 @@
           {{ form.skills(class="validate", form="updateForm") }}
           {% endif %}
         </div>
+        {% if not current_user.resume %}
         <div class="file-field input-field">
           <div class="btn red">
             <span>Upload your resume</span>
@@ -53,6 +54,7 @@
             <input class="file-path validate" type="text">
           </div>
         </div>
+        {% endif %}
         {% if current_user.resume %}
         <div class="dispf">
           <button type="submit" form="deleteResumeForm" class="btn red white-text">Delete Resume</button>
